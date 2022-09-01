@@ -6,8 +6,6 @@ const OAuthServer = require('express-oauth-server');
 const Joi = require("joi");
 const multer = require('multer');
 const blogs = require('../models/blogs');
-const OAuthClientsModel = require('../models').OAuthClients;
-const { normalize } = require('path')
 
 
 router.oauth = new OAuthServer({
@@ -18,7 +16,7 @@ router.oauth = new OAuthServer({
 let destination= 'assets/' ;
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, normalize(destination));
+      cb(null, destination);
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + '-' + file.originalname);
@@ -56,6 +54,7 @@ router.post('/create_blogs',upload.single('image'), router.oauth.authenticate(),
   let validation = Joi.object().keys({
     title: Joi.string().required(),
     description: Joi.string().required(),
+    image: Joi.string().required,
     category: Joi.string().required()
   });
   let result = validation.validate(req.body, { abortEarly: false });
@@ -120,6 +119,7 @@ router.post('/create_blogs',upload.single('image'), router.oauth.authenticate(),
     name: Joi.string().required(),
     email: Joi.string().required(),
     contact_no: Joi.string().required(),
+    image:Joi.string(),
     category: Joi.string().required()
   });
   let result = validation.validate(req.body, { abortEarly: false });
