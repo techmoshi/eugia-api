@@ -25,7 +25,7 @@ module.exports = app => {
 
   router.all('/oauth/token', obtainToken);
 
-  //router.post("/createClient", createClient.loadExampleData);
+  router.post("/createClient", createClient.loadExampleData);
 
   // Create a new Tutorial
   router.post("/create", authenticateRequest,upload.single('image'),tutorials.create);

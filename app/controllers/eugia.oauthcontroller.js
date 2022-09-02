@@ -36,8 +36,8 @@ var loadExampleData = function() {
 	});
 
 	var user = new userModel({
-		username: 'pedroetb',
-		password: 'password'
+		username: 'eugia',
+		password: 'eugia@#!$&34542'
 	});
 
 	client1.save(function(err, client) {
