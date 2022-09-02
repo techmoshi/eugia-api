@@ -163,7 +163,8 @@ exports.update = (req, res) => {
   }
 
   const id = req.params.id;
-
+  console.log("Id : ",id);
+  console.log("Data : ",req.body)
   EugiaModel.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
