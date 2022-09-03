@@ -79,6 +79,7 @@ exports.create = (req, res) => {
                       validation = Joi.object().keys({
                         title: Joi.string().required(),
                         report_date: Joi.string().required(),
+                        image:Joi.string().required(),
                         category: Joi.string().required(),
                       });
                       break;
@@ -261,6 +262,23 @@ exports.findAllCategory = (req, res) => {
       });
     });
 };
+
+// Find all published Tutorials
+exports.findAllApplyJob = (req, res) => {
+  const id = req.params.id;
+  console.log(id)
+  EugiaModel.find({ category: "applyjob",isDeleted:false })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+};
+
 
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
