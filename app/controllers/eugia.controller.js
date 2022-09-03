@@ -161,9 +161,9 @@ exports.createUser = (req, res) => {
       case "enquiry":
         validation = Joi.object().keys({
           name: Joi.string().required(),
-          last_name: Joi.string().required(),
+          mobile_no: Joi.string().required(),
           email: Joi.string().email().required(),
-          password: Joi.string().required(),
+          category: Joi.string().required(),
         });
         break;
           case "joinus":
