@@ -41,6 +41,7 @@ module.exports = app => {
   // Retrieve a single Eugia with id
   //router.get("/:id", tutorials.findOne);
 
+  
   // Update a Eugia with id
   router.put("/:id", upload.single('image'),tutorials.update);
 
