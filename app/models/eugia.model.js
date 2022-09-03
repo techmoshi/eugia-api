@@ -11,6 +11,12 @@ module.exports = mongoose => {
       mobile_no:String,
       category:String,
       report_date:String,
+      role:String,
+      role_desc:String,
+      job_desc:String,
+      exp:String,
+      qualification:String,
+      job_id:String,
       isDeleted: {
         type: Boolean,
         required: true,

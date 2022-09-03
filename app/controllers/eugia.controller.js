@@ -189,6 +189,17 @@ exports.createUser = (req, res) => {
                     category:Joi.string().required(),
                   });
                   break;
+                  case "createjob":
+                    validation = Joi.object().keys({
+                      role: Joi.string().required(),
+                      role_desc: Joi.string().required(),
+                      job_desc: Joi.string().required(),
+                      exp: Joi.string().required(),
+                      qualification: Joi.string().required(),
+                      category:Joi.string().required(),
+                    });
+                    break;
+
           default:
             res.status(400).send({ message: "Please Enter valid category" });
 
