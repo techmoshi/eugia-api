@@ -12,7 +12,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 var corsOptions = {
   origin: "http://localhost:3000"
 };
-
+this.app.use(
+  cors(),
+);
 //app.use(cors(corsOptions));
 app.use(function (err, req, res, next) {
 
@@ -31,6 +33,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.send('Invalid API Request ');
 });
+
 app.use('/assets',express.static('assets'))
 
 // parse requests of content-type - application/json
