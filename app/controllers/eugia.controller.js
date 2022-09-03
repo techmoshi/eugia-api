@@ -96,6 +96,16 @@ exports.create = (req, res) => {
                             category:Joi.string().required(),
                           });
                           break;
+                          case "createjob":
+                            validation = Joi.object().keys({
+                              role: Joi.string().required(),
+                              role_desc: Joi.string().required(),
+                              job_desc: Joi.string().required(),
+                              exp: Joi.string().required(),
+                              qualification: Joi.string().required(),
+                              category:Joi.string().required(),
+                            });
+                            break;
                 default:
                   res.status(400).send({ message: "Please Enter valid category" });
 
@@ -189,17 +199,6 @@ exports.createUser = (req, res) => {
                     category:Joi.string().required(),
                   });
                   break;
-                  case "createjob":
-                    validation = Joi.object().keys({
-                      role: Joi.string().required(),
-                      role_desc: Joi.string().required(),
-                      job_desc: Joi.string().required(),
-                      exp: Joi.string().required(),
-                      qualification: Joi.string().required(),
-                      category:Joi.string().required(),
-                    });
-                    break;
-
           default:
             res.status(400).send({ message: "Please Enter valid category" });
 
@@ -320,7 +319,7 @@ exports.findAll = (req, res) => {
   const title = req.query.title;
   var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
 
-  Tutorial.find(condition)
+  applyjob.find(condition)
     .then(data => {
       res.send(data);
     })
@@ -336,7 +335,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findById(id)
+  EugiaModel.findById(id)
     .then(data => {
       if (!data)
         res.status(404).send({ message: "Not found Tutorial with id " + id });
@@ -354,7 +353,7 @@ exports.findOne = (req, res) => {
 exports.deletes = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findByIdAndRemove(id, { useFindAndModify: false })
+  applyjob.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -375,7 +374,7 @@ exports.deletes = (req, res) => {
 
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
-  Tutorial.deleteMany({})
+  applyjob.deleteMany({})
     .then(data => {
       res.send({
         message: `${data.deletedCount} Tutorials were deleted successfully!`
