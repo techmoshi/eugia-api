@@ -199,7 +199,7 @@ exports.createUser = (req, res) => {
                     category:Joi.string().required(),
                   });
                   break;
-                  case "applyjob":
+                    case "applyjob":
                             validation = Joi.object().keys({
                               name: Joi.string().required(),
                               contact_no: Joi.string().required(),
