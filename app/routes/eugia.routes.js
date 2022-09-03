@@ -6,10 +6,10 @@ module.exports = app => {
   Response = OAuth2Server.Response;
   let router = require("express").Router();
   const multer = require('multer');
-  let destination= 'assets/' ;
+
   let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, destination);
+      cb(null,'assets');
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + '-' + file.originalname);
@@ -40,7 +40,7 @@ module.exports = app => {
   router.get("/:id", tutorials.findOne);
 
   // Update a Tutorial with id
-  router.put("/:id", authenticateRequest,tutorials.update);
+  router.put("/:id", authenticateRequest,upload.single('image'),tutorials.update);
 
   // Delete a Tutorial with id
   router.delete("/:id", authenticateRequest,tutorials.delete);

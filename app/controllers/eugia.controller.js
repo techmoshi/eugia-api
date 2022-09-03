@@ -1,7 +1,9 @@
 const db = require("../models");
 const Joi = require("joi");
 const EugiaModel = db.eugia;
-
+const express = require('express') 
+ const app = express() 
+app.use(express.json());
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
   // Validate request
@@ -164,7 +166,14 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
   console.log("Id : ",id);
+  if(req.file){
+    const path = req.file.path
+    var img_url =req.protocol+"://"+req.headers.host+"/"+path
+    req.body.image = img_url ;
+    console.log("image url ",req.file.path)
+  }
   console.log("Data : ",req.body)
+
   EugiaModel.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
@@ -174,6 +183,7 @@ exports.update = (req, res) => {
       } else res.send({ message: "Tutorial was updated successfully." });
     })
     .catch(err => {
+      console.log(err)
       res.status(500).send({
         message: "Error updating Tutorial with id=" + id
       });
