@@ -27,25 +27,27 @@ module.exports = app => {
 
   //router.post("/createClient", createClient.loadExampleData);
 
-  // Create a new Tutorial
+  // Create a new Eugia
   router.post("/create", authenticateRequest,upload.single('image'),tutorials.create);
 
-  // Retrieve all Tutorials
+  router.post("/create_user",upload.single('image'),tutorials.createUser);
+
+  // Retrieve all Eugia
   router.get("/", tutorials.findAll);
 
-  // Retrieve all published Tutorials
+  // Retrieve all published Eugia
   router.get("/category/:id", tutorials.findAllCategory);
 
-  // Retrieve a single Tutorial with id
+  // Retrieve a single Eugia with id
   router.get("/:id", tutorials.findOne);
 
-  // Update a Tutorial with id
+  // Update a Eugia with id
   router.put("/:id", authenticateRequest,upload.single('image'),tutorials.update);
 
-  // Delete a Tutorial with id
+  // Delete a Eugia with id
   router.delete("/:id", authenticateRequest,tutorials.delete);
 
-  // Create a new Tutorial
+  // Create a new Eugia
   router.delete("/", tutorials.deleteAll);
 
   app.use("/api/eugia", router);
