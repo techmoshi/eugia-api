@@ -49,7 +49,7 @@ module.exports = app => {
   router.put("/:id", upload.single('image'),tutorials.update);
 
   // Delete a Eugia with id
-  router.delete("/delete/:id", tutorials.delete);
+  router.delete("/:id", tutorials.delete);
 
   // Create a new Eugia
   router.delete("/", tutorials.deleteAll);
