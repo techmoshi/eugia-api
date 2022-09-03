@@ -149,11 +149,12 @@ exports.createUser = (req, res) => {
 
   let validation ;
   switch(req.body.category.toLowerCase()) {
-    case "products":
+    case "contactus":
       validation = Joi.object().keys({
-        title: Joi.string().required(),
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        mobile_no: Joi.string().required(),
         description: Joi.string().required(),
-        image: Joi.string().required(),
         category: Joi.string().required(),
       });
       break;
