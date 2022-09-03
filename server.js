@@ -14,7 +14,7 @@ var corsOptions = {
 };
 
 //app.use(cors(corsOptions));
-this.app.use(function (err, req, res, next) {
+app.use(function (err, req, res, next) {
 
   console.log(err);
 
