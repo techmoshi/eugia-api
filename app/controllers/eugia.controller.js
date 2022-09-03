@@ -207,6 +207,7 @@ exports.createUser = (req, res) => {
                               description: Joi.string().required(),
                               image: Joi.string().required(),
                               category:Joi.string().required(),
+                              job_id:Joi.string().required()
                             });
                             break;
           default:
