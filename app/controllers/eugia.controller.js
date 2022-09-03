@@ -137,7 +137,7 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          err.message || "Some error occurred while creating the Eughia."
       });
     });
 };
@@ -199,6 +199,16 @@ exports.createUser = (req, res) => {
                     category:Joi.string().required(),
                   });
                   break;
+                  case "applyjob":
+                            validation = Joi.object().keys({
+                              name: Joi.string().required(),
+                              contact_no: Joi.string().required(),
+                              email: Joi.string().required(),
+                              description: Joi.string().required(),
+                              image: Joi.string().required(),
+                              category:Joi.string().required(),
+                            });
+                            break;
           default:
             res.status(400).send({ message: "Please Enter valid category" });
 
