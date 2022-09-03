@@ -28,7 +28,7 @@ module.exports = app => {
   //router.post("/createClient", createClient.loadExampleData);
 
   // Create a new Eugia
-  router.post("/create", authenticateRequest,upload.single('image'),tutorials.create);
+  router.post("/create", upload.single('image'),tutorials.create);
 
   router.post("/create_user",upload.single('image'),tutorials.createUser);
 
@@ -42,10 +42,10 @@ module.exports = app => {
   router.get("/:id", tutorials.findOne);
 
   // Update a Eugia with id
-  router.put("/:id", authenticateRequest,upload.single('image'),tutorials.update);
+  router.put("/:id", upload.single('image'),tutorials.update);
 
   // Delete a Eugia with id
-  router.delete("/:id", authenticateRequest,tutorials.delete);
+  router.delete("/:id", tutorials.delete);
 
   // Create a new Eugia
   router.delete("/", tutorials.deleteAll);
