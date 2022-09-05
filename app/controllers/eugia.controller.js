@@ -123,6 +123,13 @@ exports.create = (req, res) => {
                                 image: Joi.string().required(),
                                 category: Joi.string().required(),
                               });
+                              case "director":
+                                validation = Joi.object().keys({
+                                  title: Joi.string().required(),
+                                  description: Joi.string().required(),
+                                  image: Joi.string().required(),
+                                  category: Joi.string().required(),
+                                });
                               break;
                                 case "subscribe":
                                   validation = Joi.object().keys({
