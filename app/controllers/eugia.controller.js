@@ -47,6 +47,7 @@ exports.create = (req, res) => {
           case "awards":
             validation = Joi.object().keys({
               title: Joi.string().required(),
+              description: Joi.string().required(),
               image: Joi.string().required(),
               category: Joi.string().required()
             });
@@ -91,6 +92,22 @@ exports.create = (req, res) => {
                           category: Joi.string().required(),
                         });
                         break;
+                        case "news":
+                          validation = Joi.object().keys({
+                            title: Joi.string().required(),
+                            description: Joi.string().required(),
+                            image: Joi.string().required(),
+                            category: Joi.string().required(),
+                          });
+                          break;
+                          case "career":
+                            validation = Joi.object().keys({
+                              title: Joi.string().required(),
+                              description: Joi.string().required(),
+                              image: Joi.string().required(),
+                              category: Joi.string().required(),
+                            });
+                            break;
                         case "subscribe":
                           validation = Joi.object().keys({
                             email: Joi.string().email().required(),
