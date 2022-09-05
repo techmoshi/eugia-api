@@ -108,13 +108,29 @@ exports.create = (req, res) => {
                               category: Joi.string().required(),
                             });
                             break;
-                        case "subscribe":
-                          validation = Joi.object().keys({
-                            email: Joi.string().email().required(),
-                            category:Joi.string().required(),
-                          });
-                          break;
-                          case "createjob":
+                            case "treatment":
+                              validation = Joi.object().keys({
+                                title: Joi.string().required(),
+                                description: Joi.string().required(),
+                                image: Joi.string().required(),
+                                category: Joi.string().required(),
+                              });
+                              break;
+                              case "responsibility":
+                              validation = Joi.object().keys({
+                                title: Joi.string().required(),
+                                description: Joi.string().required(),
+                                image: Joi.string().required(),
+                                category: Joi.string().required(),
+                              });
+                              break;
+                                case "subscribe":
+                                  validation = Joi.object().keys({
+                                    email: Joi.string().email().required(),
+                                    category:Joi.string().required(),
+                                  });
+                                  break;
+                                  case "createjob":
                             validation = Joi.object().keys({
                               role: Joi.string().required(),
                               role_desc: Joi.string().required(),
