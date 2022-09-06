@@ -519,7 +519,9 @@ exports.count = (req,res)=>{
       condition.category = "$createjob"
   }
   EugiaModel.aggregate([
-
+    {
+      $match:{isDeleted:false},
+    },
     { 
       $group : { _id : "$category" , count:{$sum:1}}}
 ]).then(response=>{
