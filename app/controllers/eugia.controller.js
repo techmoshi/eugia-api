@@ -293,7 +293,7 @@ exports.createUser = (req, res) => {
 exports.findAllCategory = (req, res) => {
   const id = req.params.id;
   console.log(id)
-  EugiaModel.find({ category: id,isDeleted:false })
+  EugiaModel.find({ category: id,isDeleted:false }).sort({createdAt:1})
     .then(data => {
       res.send(data);
     })
@@ -390,7 +390,7 @@ exports.findAll = (req, res) => {
   const title = req.query.title;
   var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
 
-  applyjob.find(condition)
+  ApplyJob.find(condition).sort({createdAt:1})
     .then(data => {
       res.send(data);
     })
@@ -424,7 +424,7 @@ exports.findOne = (req, res) => {
 exports.deletes = (req, res) => {
   const id = req.params.id;
 
-  applyjob.findByIdAndRemove(id, { useFindAndModify: false })
+  ApplyJob.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -445,7 +445,7 @@ exports.deletes = (req, res) => {
 
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
-  applyjob.deleteMany({})
+  ApplyJob.deleteMany({})
     .then(data => {
       res.send({
         message: `${data.deletedCount} Tutorials were deleted successfully!`
@@ -487,13 +487,24 @@ exports.applyJob=(req,res)=>{
 }
 exports.jobList = (req,res)=>{  
   ApplyJob.aggregate([
+    // { $project : { updatedAt: 0, createdAt: 0 } },
+    {
+      $sort:{createdAt:1}
+    },
     {
     $lookup: {
     "from": "eugias",
     "localField": "job_id",
     "foreignField": "_id",
-    "as": "Applicants"
-    }
+    "as": "Applicants"        
+    },
+ },
+ 
+ {
+  $project:{
+    'Job.updatedAt':0,
+    'Job.createdAt': 0
+  }
  }
   ]).then(resp=>{
       res.json(resp)
