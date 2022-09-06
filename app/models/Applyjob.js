@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const applyJob = new Schema({        
-        Job_id:String ,
+        job_id:{type:mongoose.Schema.ObjectId,required:true},
         name:String,
         contact_no:String,
         email:String,

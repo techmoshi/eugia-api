@@ -145,7 +145,7 @@ exports.create = (req, res) => {
                               job_desc: Joi.string().required(),
                               exp: Joi.string().required(),
                               qualification: Joi.string().required(),
-                              Job_id: Joi.string().required(),
+                              // Job_id: Joi.string().required(),
                               category:Joi.string().required(),
                             });
                             break;
@@ -460,9 +460,9 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.applyJob=(req,res)=>{
-  const {Job_id,name,contact_no,email,description,image,category} = req.body
+  const {job_id,name,contact_no,email,description,image,category} = req.body
   const applyJob = ApplyJob({
-    Job_id,
+    job_id,
     name,
     contact_no,
     email,
@@ -477,19 +477,18 @@ exports.applyJob=(req,res)=>{
   })
 }
 exports.jobList = (req,res)=>{  
-  EugiaModel.aggregate([
+  ApplyJob.aggregate([
     {
     $lookup: {
-    "from": "applyjobs",
-    "localField": "Job_id",
-    "foreignField": "Job_id",
+    "from": "eugias",
+    "localField": "job_id",
+    "foreignField": "_id",
     "as": "Applicants"
-    }    
+    }
  }
   ]).then(resp=>{
       res.json(resp)
     }).catch(err=>{
       res.json(err)
     })
-}
-
+  }
