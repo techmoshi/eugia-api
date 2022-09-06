@@ -1,6 +1,7 @@
 const db = require("../models");
 const Joi = require("joi");
 const EugiaModel = db.eugia;
+const ApplyJob = require('../models/Applyjob');
 const express = require('express') 
  const app = express() 
 app.use(express.json());
@@ -144,6 +145,7 @@ exports.create = (req, res) => {
                               job_desc: Joi.string().required(),
                               exp: Joi.string().required(),
                               qualification: Joi.string().required(),
+                              Job_id: Joi.string().required(),
                               category:Joi.string().required(),
                             });
                             break;
@@ -457,4 +459,37 @@ exports.deleteAll = (req, res) => {
     });
 };
 
+exports.applyJob=(req,res)=>{
+  const {Job_id,name,contact_no,email,description,image,category} = req.body
+  const applyJob = ApplyJob({
+    Job_id,
+    name,
+    contact_no,
+    email,
+    description,
+    image,
+    category
+  })
+  applyJob.save().then(resp=>{
+    res.json(resp)
+  }).catch(err=>{
+    res.json(err)
+  })
+}
+exports.jobList = (req,res)=>{  
+  EugiaModel.aggregate([
+    {
+    $lookup: {
+    "from": "applyjobs",
+    "localField": "Job_id",
+    "foreignField": "Job_id",
+    "as": "Applicants"
+    }    
+ }
+  ]).then(resp=>{
+      res.json(resp)
+    }).catch(err=>{
+      res.json(err)
+    })
+}
 

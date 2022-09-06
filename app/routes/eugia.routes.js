@@ -45,6 +45,12 @@ module.exports = app => {
   //router.get("/:id", tutorials.findOne);
 
 
+  // apply job
+  router.post("/applyjob", tutorials.applyJob);
+
+  // job list
+  router.get("/job_list", tutorials.jobList);
+
   // Update a Eugia with id
   router.put("/:id", upload.single('image'),tutorials.update);
 
