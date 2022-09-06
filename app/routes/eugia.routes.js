@@ -46,7 +46,7 @@ module.exports = app => {
 
 
   // apply job
-  router.post("/applyjob", tutorials.applyJob);
+  router.post("/applyjobs", upload.single('image'), tutorials.applyJob);
 
   // job list
   router.get("/job_list", tutorials.jobList);

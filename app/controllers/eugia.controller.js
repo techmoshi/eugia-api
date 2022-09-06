@@ -460,6 +460,14 @@ exports.deleteAll = (req, res) => {
 };
 
 exports.applyJob=(req,res)=>{
+  console.log("Welcome")
+  if(req.file){
+    const path = req.file.path
+    var img_url =req.protocol+"://"+req.headers.host+"/"+path
+    req.body.image = img_url ;
+    console.log("image url ",req.file.path)
+  }
+  req.body.image = img_url ;
   const {job_id,name,contact_no,email,description,image,category} = req.body
   const applyJob = ApplyJob({
     job_id,
@@ -470,6 +478,7 @@ exports.applyJob=(req,res)=>{
     image,
     category
   })
+  console.log(req.body)
   applyJob.save().then(resp=>{
     res.json(resp)
   }).catch(err=>{
