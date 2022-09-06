@@ -51,6 +51,9 @@ module.exports = app => {
   // job list
   router.get("/job_list", tutorials.jobList);
 
+  // count
+  router.get("/count", tutorials.count);
+
   // Update a Eugia with id
   router.put("/:id", upload.single('image'),tutorials.update);
 

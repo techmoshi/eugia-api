@@ -512,3 +512,23 @@ exports.jobList = (req,res)=>{
       res.json(err)
     })
   }
+exports.count = (req,res)=>{
+  let condition={}
+
+  if(req.body.category=="createjob"){
+      condition.category = "$createjob"
+  }
+  EugiaModel.aggregate([
+
+    { 
+      $group : { _id : "$category" , count:{$sum:1}}}
+]).then(response=>{
+  res.json(response)
+}).catch(err=>{
+  console.log(err);
+  res.json(err)
+})
+}
+
+
+// contact/product/investor/join journy
