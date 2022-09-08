@@ -38,6 +38,8 @@ module.exports = app => {
   // Retrieve all published Eugia
   router.get("/category/:id", tutorials.findAllCategory);
 
+  // Retrieve treatment Lists
+  router.get("/category/:category/:id", tutorials.TreatmentList);
   //Apply jobs details 
   router.get("/category/apply", tutorials.findAllApplyJob);
 

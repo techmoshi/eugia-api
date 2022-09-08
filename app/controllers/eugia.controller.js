@@ -120,6 +120,7 @@ exports.create = (req, res) => {
                               break;
                               case "treatment_category":
                                 validation = Joi.object().keys({
+                                  category: Joi.string().required(),
                                   title: Joi.string().required(),
                                 });
                                 break;
@@ -330,6 +331,22 @@ exports.findAllCategory = (req, res) => {
     });
 };
 
+
+// Find all treatment List
+exports.TreatmentList = (req,res)=>{
+  const id = req.params.id;
+  const category = req.params.category; 
+  EugiaModel.find({category:category,category_id:id})
+  .then(response=>{
+    res.send(response)
+  }).catch(err=>{
+    res.status(500).send({
+      message:
+          err.message || "some error occurred while retrieving tutorials"
+    })
+  })
+}
+
 // Find all published Tutorials
 exports.findAllApplyJob = (req, res) => {
   const id = req.params.id;
@@ -345,6 +362,8 @@ exports.findAllApplyJob = (req, res) => {
       });
     });
 };
+
+
 
 
 // Update a Tutorial by the id in the request

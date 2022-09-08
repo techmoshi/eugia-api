@@ -10,6 +10,7 @@ module.exports = mongoose => {
       email:String,
       mobile_no:String,
       category:String,
+      category_id:String,
       report_date:String,
       role:String,
       role_desc:String,
