@@ -265,6 +265,7 @@ exports.createUser = (req, res) => {
                                 email: Joi.string().email().required(),
                                 mobile_no: Joi.string().required(),
                                 description: Joi.string().required(),
+                                image: Joi.string().required(),
                                 category:Joi.string().required(),
                               });
                               case "anyoneapply":
@@ -273,6 +274,7 @@ exports.createUser = (req, res) => {
                                   email: Joi.string().email().required(),
                                   mobile_no: Joi.string().required(),
                                   description: Joi.string().required(),
+                                  image: Joi.string().required(),
                                   category:Joi.string().required(),
                                 });
 
