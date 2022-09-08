@@ -195,6 +195,7 @@ exports.create = (req, res) => {
 // Create and Save a new Tutorial
 exports.createUser = (req, res) => {
   // Validate request
+  
   if (!req.body.category) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
@@ -242,44 +243,45 @@ exports.createUser = (req, res) => {
                 description: Joi.string().required(),
                 category:Joi.string().required(),
               });
-              break;
-                case "subscribe":
-                  validation = Joi.object().keys({
-                    email: Joi.string().email().required(),
-                    category:Joi.string().required(),
+            break;
+            case "subscribe":
+              validation = Joi.object().keys({
+                email: Joi.string().email().required(),
+                category:Joi.string().required(),
                   });
-                  break;
-                    case "applyjob":
-                            validation = Joi.object().keys({
-                              name: Joi.string().required(),
-                              contact_no: Joi.string().required(),
-                              email: Joi.string().required(),
-                              description: Joi.string().required(),
-                              image: Joi.string().required(),
-                              category:Joi.string().required(),
-                              job_id:Joi.string().required()
-                            });
-                            break;
-                            case "intern":
-                              validation = Joi.object().keys({
-                                name: Joi.string().required(),
-                                email: Joi.string().email().required(),
-                                mobile_no: Joi.string().required(),
-                                description: Joi.string().required(),
-                                image: Joi.string().required(),
-                                category:Joi.string().required(),
-                              });
-                              case "anyoneapply":
-                                validation = Joi.object().keys({
-                                  name: Joi.string().required(),
-                                  email: Joi.string().email().required(),
-                                  mobile_no: Joi.string().required(),
-                                  description: Joi.string().required(),
-                                  image: Joi.string().required(),
-                                  category:Joi.string().required(),
-                                });
-
-          default:
+            break;
+            case "applyjob":
+                validation = Joi.object().keys({
+                  name: Joi.string().required(),
+                  contact_no: Joi.string().required(),
+                  email: Joi.string().required(),
+                  description: Joi.string().required(),
+                  image: Joi.string().required(),
+                  category:Joi.string().required(),
+                  job_id:Joi.string().required()
+                  });
+            break;
+            case "intern":
+              validation = Joi.object().keys({
+                name: Joi.string().required(),
+                email: Joi.string().email().required(),
+                mobile_no: Joi.string().required(),
+                description: Joi.string().required(),
+                image: Joi.string().required(),
+                category:Joi.string().required(),
+              });
+            break;            
+            case "anyoneapply":
+              validation = Joi.object().keys({
+                name: Joi.string().required(),
+                email: Joi.string().email().required(),
+                mobile_no: Joi.string().required(),
+                description: Joi.string().required(),
+                image: Joi.string().required(),
+                category:Joi.string().required(),
+              });
+            break;             
+          default:            
             res.status(400).send({ message: "Please Enter valid category" });
 
   }
