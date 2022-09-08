@@ -253,6 +253,23 @@ exports.createUser = (req, res) => {
                               job_id:Joi.string().required()
                             });
                             break;
+                            case "intern":
+                              validation = Joi.object().keys({
+                                name: Joi.string().required(),
+                                email: Joi.string().email().required(),
+                                mobile_no: Joi.string().required(),
+                                description: Joi.string().required(),
+                                category:Joi.string().required(),
+                              });
+                              case "anyoneapply":
+                                validation = Joi.object().keys({
+                                  name: Joi.string().required(),
+                                  email: Joi.string().email().required(),
+                                  mobile_no: Joi.string().required(),
+                                  description: Joi.string().required(),
+                                  category:Joi.string().required(),
+                                });
+
           default:
             res.status(400).send({ message: "Please Enter valid category" });
 
