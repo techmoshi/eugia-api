@@ -115,8 +115,14 @@ exports.create = (req, res) => {
                                 description: Joi.string().required(),
                                 image: Joi.string().required(),
                                 category: Joi.string().required(),
+                                category_id:Joi.string().required(),
                               });
                               break;
+                              case "treatment_category":
+                                validation = Joi.object().keys({
+                                  title: Joi.string().required(),
+                                });
+                                break;
                               case "responsibility":
                               validation = Joi.object().keys({
                                 title: Joi.string().required(),
@@ -139,16 +145,16 @@ exports.create = (req, res) => {
                                   });
                                   break;
                                   case "createjob":
-                            validation = Joi.object().keys({
-                              role: Joi.string().required(),
-                              role_desc: Joi.string().required(),
-                              job_desc: Joi.string().required(),
-                              exp: Joi.string().required(),
-                              qualification: Joi.string().required(),
-                              // Job_id: Joi.string().required(),
-                              category:Joi.string().required(),
-                            });
-                            break;
+                                  validation = Joi.object().keys({
+                                    role: Joi.string().required(),
+                                    role_desc: Joi.string().required(),
+                                    job_desc: Joi.string().required(),
+                                    exp: Joi.string().required(),
+                                    qualification: Joi.string().required(),
+                                    // Job_id: Joi.string().required(),
+                                    category:Joi.string().required(),
+                                  });
+                                  break;
                 default:
                   res.status(400).send({ message: "Please Enter valid category" });
 
