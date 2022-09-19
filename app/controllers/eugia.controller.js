@@ -338,7 +338,7 @@ exports.findAllCategory = (req, res) => {
 exports.TreatmentList = (req,res)=>{
   const id = req.params.id;
   const category = req.params.category; 
-  EugiaModel.find({category:category,category_id:id})
+  EugiaModel.find({category:category,category_id:id,isDeleted:false})
   .then(response=>{
     res.send(response)
   }).catch(err=>{
@@ -568,7 +568,7 @@ exports.count = (req,res)=>{
     {
       $match:{isDeleted:false},
     },
-    { 
+    {
       $group : { _id : "$category" , count:{$sum:1}}}
 ]).then(response=>{
   res.json(response)
