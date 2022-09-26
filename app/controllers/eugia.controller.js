@@ -57,6 +57,7 @@ exports.create = (req, res) => {
               validation = Joi.object().keys({
                 name: Joi.string().required(),
                 designation: Joi.string().required(),
+                description: Joi.string().required(),
                 image: Joi.string().required(),
                 category: Joi.string().required()
               });
@@ -135,6 +136,7 @@ exports.create = (req, res) => {
                                 validation = Joi.object().keys({
                                   title: Joi.string().required(),
                                   description: Joi.string().required(),
+                                  designation:Joi.string().required(),
                                   image: Joi.string().required(),
                                   category: Joi.string().required(),
                                 });
