@@ -100,6 +100,7 @@ exports.create = (req, res) => {
                             description: Joi.string().required(),
                             image: Joi.string().required(),
                             category: Joi.string().required(),
+                            qualification: Joi.string.required()
                           });
                           break;
                           case "career":
@@ -108,6 +109,8 @@ exports.create = (req, res) => {
                               description: Joi.string().required(),
                               image: Joi.string().required(),
                               category: Joi.string().required(),
+                              exp:Joi.string().required(),
+                              qualification:Joi.string().required()
                             });
                             break;
                             case "treatment":
