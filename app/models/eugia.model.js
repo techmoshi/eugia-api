@@ -17,6 +17,7 @@ module.exports = mongoose => {
       job_desc:String,
       exp:String,
       qualification:String,
+      job_location:String,
       // Job_id:String  ,
       isDeleted: {
         type: Boolean,

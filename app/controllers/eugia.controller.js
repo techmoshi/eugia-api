@@ -110,7 +110,8 @@ exports.create = (req, res) => {
                               image: Joi.string().required(),
                               category: Joi.string().required(),
                               exp:Joi.string().required(),
-                              qualification:Joi.string().required()
+                              qualification:Joi.string().required(),
+                              job_location:Joi.string().required()
                             });
                             break;
                             case "treatment":
