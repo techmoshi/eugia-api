@@ -1,9 +1,11 @@
 const db = require("../models");
 const Joi = require("joi");
 const EugiaModel = db.eugia;
-const ApplyJob = require('../models/Applyjob');
-const express = require('express') 
- const app = express() 
+const ApplyJob = require("../models/Applyjob");
+const express = require("express");
+const { sendEmail } = require("../helpers/email");
+const { mailTemplates } = require("../helpers/constants");
+const app = express();
 app.use(express.json());
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
@@ -13,14 +15,14 @@ exports.create = (req, res) => {
     return;
   }
 
-  if(req.file){
-    const path = req.file.path
-    var img_url =req.protocol+"://"+req.headers.host+"/"+path
-    req.body.image = img_url ;
-    console.log("image url ",req.file.path)
+  if (req.file) {
+    const path = req.file.path;
+    var img_url = req.protocol + "://" + req.headers.host + "/" + path;
+    req.body.image = img_url;
+    console.log("image url ", req.file.path);
   }
-  let validation ;
-  switch(req.body.category.toLowerCase()) {
+  let validation;
+  switch (req.body.category.toLowerCase()) {
     case "products":
       validation = Joi.object().keys({
         title: Joi.string().required(),
@@ -29,142 +31,141 @@ exports.create = (req, res) => {
         category: Joi.string().required(),
       });
       break;
-      case "enquiry":
-        validation = Joi.object().keys({
-          name: Joi.string().required(),
-          last_name: Joi.string().required(),
-          email: Joi.string().email().required(),
-          password: Joi.string().required(),
-        });
-        break;
-        case "medicines":
-          validation = Joi.object().keys({
-            title: Joi.string().required(),
-            description: Joi.string().required(),
-            image: Joi.string().required(),
-            category: Joi.string().required(),
-          });
-          break;
-          case "awards":
-            validation = Joi.object().keys({
-              title: Joi.string().required(),
-              description: Joi.string().required(),
-              image: Joi.string().required(),
-              category: Joi.string().required()
-            });
-            break; 
-            case "management":
-              validation = Joi.object().keys({
-                name: Joi.string().required(),
-                designation: Joi.string().required(),
-                description: Joi.string().required(),
-                image: Joi.string().required(),
-                category: Joi.string().required()
-              });
-              break;
-              case "faq":
-                validation = Joi.object().keys({
-                  title: Joi.string().required(),
-                  description: Joi.string().required(),
-                  category: Joi.string().required()
-                });
-                break;
-                  case "aboutus":
-                    validation = Joi.object().keys({
-                      name: Joi.string().required(),
-                      email: Joi.string().email().required(),
-                      mobile_no: Joi.string().required(),
-                      description: Joi.string().required(),
-                      category:Joi.string().required(),
-                    });
-                    break;
-                    case "reports":
-                      validation = Joi.object().keys({
-                        title: Joi.string().required(),
-                        report_date: Joi.string().required(),
-                        image:Joi.string().required(),
-                        category: Joi.string().required(),
-                      });
-                      break;
-                      case "blogs":
-                        validation = Joi.object().keys({
-                          title: Joi.string().required(),
-                          description: Joi.string().required(),
-                          image: Joi.string().required(),
-                          category: Joi.string().required(),
-                        });
-                        break;
-                        case "news":
-                          validation = Joi.object().keys({
-                            title: Joi.string().required(),
-                            description: Joi.string().required(),
-                            image: Joi.string().required(),
-                            category: Joi.string().required(),
-                            qualification: Joi.string.required()
-                          });
-                          break;
-                          case "career":
-                            validation = Joi.object().keys({
-                              title: Joi.string().required(),
-                              description: Joi.string().required(),
-                              image: Joi.string().required(),
-                              category: Joi.string().required(),
-                              exp:Joi.string().required(),
-                              qualification:Joi.string().required(),
-                              job_location:Joi.string().required()
-                            });
-                            break;
-                            case "treatment":
-                              validation = Joi.object().keys({
-                                title: Joi.string().required(),
-                                description: Joi.string().required(),
-                                image: Joi.string().required(),
-                                category: Joi.string().required(),
-                                category_id:Joi.string().required(),
-                              });
-                              break;
-                              case "treatment_category":
-                                validation = Joi.object().keys({
-                                  category: Joi.string().required(),
-                                  title: Joi.string().required(),
-                                });
-                                break;
-                              case "responsibility":
-                              validation = Joi.object().keys({
-                                title: Joi.string().required(),
-                                description: Joi.string().required(),
-                                image: Joi.string().required(),
-                                category: Joi.string().required(),
-                              });
-                              case "director":
-                                validation = Joi.object().keys({
-                                  title: Joi.string().required(),
-                                  description: Joi.string().required(),
-                                  designation:Joi.string().required(),
-                                  image: Joi.string().required(),
-                                  category: Joi.string().required(),
-                                });
-                              break;
-                                case "subscribe":
-                                  validation = Joi.object().keys({
-                                    email: Joi.string().email().required(),
-                                    category:Joi.string().required(),
-                                  });
-                                  break;
-                                  case "createjob":
-                                  validation = Joi.object().keys({
-                                    role: Joi.string().required(),
-                                    role_desc: Joi.string().required(),
-                                    job_desc: Joi.string().required(),
-                                    exp: Joi.string().required(),
-                                    qualification: Joi.string().required(),
-                                    // Job_id: Joi.string().required(),
-                                    category:Joi.string().required(),
-                                  });
-                                  break;
-                default:
-                  res.status(400).send({ message: "Please Enter valid category" });
-
+    case "enquiry":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        last_name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().required(),
+      });
+      break;
+    case "medicines":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "awards":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "management":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        designation: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "faq":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "aboutus":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        mobile_no: Joi.string().required(),
+        description: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "reports":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        report_date: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "blogs":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "news":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+        qualification: Joi.string.required(),
+      });
+      break;
+    case "career":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+        exp: Joi.string().required(),
+        qualification: Joi.string().required(),
+        job_location: Joi.string().required(),
+      });
+      break;
+    case "treatment":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+        category_id: Joi.string().required(),
+      });
+      break;
+    case "treatment_category":
+      validation = Joi.object().keys({
+        category: Joi.string().required(),
+        title: Joi.string().required(),
+      });
+      break;
+    case "responsibility":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+    case "director":
+      validation = Joi.object().keys({
+        title: Joi.string().required(),
+        description: Joi.string().required(),
+        designation: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "subscribe":
+      validation = Joi.object().keys({
+        email: Joi.string().email().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "createjob":
+      validation = Joi.object().keys({
+        role: Joi.string().required(),
+        role_desc: Joi.string().required(),
+        job_desc: Joi.string().required(),
+        exp: Joi.string().required(),
+        qualification: Joi.string().required(),
+        // Job_id: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    default:
+      res.status(400).send({ message: "Please Enter valid category" });
   }
 
   let result = validation.validate(req.body, { abortEarly: false });
@@ -177,9 +178,7 @@ exports.create = (req, res) => {
     return;
   }
 
-  req.body.published = req.body.published ? req.body.published : true ;
-
-
+  req.body.published = req.body.published ? req.body.published : true;
 
   // Create a Tutorial
   const eugiaModel = new EugiaModel(req.body);
@@ -187,13 +186,13 @@ exports.create = (req, res) => {
   // Save Tutorial in the database
   eugiaModel
     .save(eugiaModel)
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Eughia."
+          err.message || "Some error occurred while creating the Eughia.",
       });
     });
 };
@@ -201,21 +200,21 @@ exports.create = (req, res) => {
 // Create and Save a new Tutorial
 exports.createUser = (req, res) => {
   // Validate request
-  
+
   if (!req.body.category) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
 
-  if(req.file){
-    const path = req.file.path
-    var img_url =req.protocol+"://"+req.headers.host+"/"+path
-    req.body.image = img_url ;
-    console.log("image url ",req.file.path)
+  if (req.file) {
+    const path = req.file.path;
+    var img_url = req.protocol + "://" + req.headers.host + "/" + path;
+    req.body.image = img_url;
+    console.log("image url ", req.file.path);
   }
 
-  let validation ;
-  switch(req.body.category.toLowerCase()) {
+  let validation;
+  switch (req.body.category.toLowerCase()) {
     case "contactus":
       validation = Joi.object().keys({
         name: Joi.string().required(),
@@ -225,71 +224,70 @@ exports.createUser = (req, res) => {
         category: Joi.string().required(),
       });
       break;
-      case "enquiry":
-        validation = Joi.object().keys({
-          name: Joi.string().required(),
-          mobile_no: Joi.string().required(),
-          email: Joi.string().email().required(),
-          category: Joi.string().required(),
-        });
-        break;
-          case "joinus":
-            validation = Joi.object().keys({
-              name: Joi.string().required(),
-              email: Joi.string().email().required(),
-              mobile_no: Joi.string().required(),
-              category: Joi.string().required(),
-            });
-            break;
-            case "aboutus":
-              validation = Joi.object().keys({
-                name: Joi.string().required(),
-                email: Joi.string().email().required(),
-                mobile_no: Joi.string().required(),
-                description: Joi.string().required(),
-                category:Joi.string().required(),
-              });
-            break;
-            case "subscribe":
-              validation = Joi.object().keys({
-                email: Joi.string().email().required(),
-                category:Joi.string().required(),
-                  });
-            break;
-            case "applyjob":
-                validation = Joi.object().keys({
-                  name: Joi.string().required(),
-                  contact_no: Joi.string().required(),
-                  email: Joi.string().required(),
-                  description: Joi.string().required(),
-                  image: Joi.string().required(),
-                  category:Joi.string().required(),
-                  job_id:Joi.string().required()
-                  });
-            break;
-            case "intern":
-              validation = Joi.object().keys({
-                name: Joi.string().required(),
-                email: Joi.string().email().required(),
-                mobile_no: Joi.string().required(),
-                description: Joi.string().required(),
-                image: Joi.string().required(),
-                category:Joi.string().required(),
-              });
-            break;            
-            case "anyoneapply":
-              validation = Joi.object().keys({
-                name: Joi.string().required(),
-                email: Joi.string().email().required(),
-                mobile_no: Joi.string().required(),
-                description: Joi.string().required(),
-                image: Joi.string().required(),
-                category:Joi.string().required(),
-              });
-            break;             
-          default:            
-            res.status(400).send({ message: "Please Enter valid category" });
-
+    case "enquiry":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        mobile_no: Joi.string().required(),
+        email: Joi.string().email().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "joinus":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        mobile_no: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "aboutus":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        mobile_no: Joi.string().required(),
+        description: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "subscribe":
+      validation = Joi.object().keys({
+        email: Joi.string().email().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "applyjob":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        contact_no: Joi.string().required(),
+        email: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+        job_id: Joi.string().required(),
+      });
+      break;
+    case "intern":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        mobile_no: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    case "anyoneapply":
+      validation = Joi.object().keys({
+        name: Joi.string().required(),
+        email: Joi.string().email().required(),
+        mobile_no: Joi.string().required(),
+        description: Joi.string().required(),
+        image: Joi.string().required(),
+        category: Joi.string().required(),
+      });
+      break;
+    default:
+      res.status(400).send({ message: "Please Enter valid category" });
   }
 
   let result = validation.validate(req.body, { abortEarly: false });
@@ -302,9 +300,7 @@ exports.createUser = (req, res) => {
     return;
   }
 
-  req.body.published = req.body.published ? req.body.published : true ;
-
-
+  req.body.published = req.body.published ? req.body.published : true;
 
   // Create a Tutorial
   const eugiaModel = new EugiaModel(req.body);
@@ -312,13 +308,65 @@ exports.createUser = (req, res) => {
   // Save Tutorial in the database
   eugiaModel
     .save(eugiaModel)
-    .then(data => {
+    .then((data) => {
+      if (req.body.category.toLowerCase() === "joinus")
+        sendEmail(
+          {
+            from: "testinteugia@eugia.co.in",
+            to: "IR@eugia.co.in",
+            name: req.body.name,
+            email: req.body.email,
+            mobile_no: req.body.mobile_no,
+          },
+          mailTemplates.joinUs
+        );
+      else if (req.body.category.toLowerCase() === "contactus")
+        sendEmail(
+          {
+            from: "testinteugia@eugia.co.in",
+            to: "info@eugia.co.in",
+            name: req.body.name,
+            email: req.body.email,
+            mobile_no: req.body.mobile_no,
+            description: req.body.description,
+          },
+          mailTemplates.contactUs
+        );
+      else if (req.body.category.toLowerCase() === "enquiry")
+        sendEmail(
+          {
+            from: "testinteugia@eugia.co.in",
+            to: "info@eugia.co.in",
+            name: req.body.name,
+            email: req.body.email,
+            mobile_no: req.body.mobile_no,
+          },
+          mailTemplates.enquiry
+        );
+      else if (
+        req.body.category.toLowerCase() === "anyonecanapply" ||
+        req.body.category.toLowerCase() === "intern" ||
+        req.body.category.toLowerCase() === "applyjob"
+      )
+        sendEmail(
+          {
+            from: "testinteugia@eugia.co.in",
+            to: "eugiacareers@eugia.co.in",
+            name: req.body.name,
+            email: req.body.email,
+            mobile_no: req.body.mobile_no,
+            description: req.body.description,
+            attachments: [req.file],
+          },
+          mailTemplates[req.body.category.toLowerCase()]
+        );
+
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          err.message || "Some error occurred while creating the Tutorial.",
       });
     });
 };
@@ -326,84 +374,82 @@ exports.createUser = (req, res) => {
 // Find all published Tutorials
 exports.findAllCategory = (req, res) => {
   const id = req.params.id;
-  console.log(id)
-  EugiaModel.find({ category: id,isDeleted:false }).sort({createdAt:1})
-    .then(data => {
+  console.log(id);
+  EugiaModel.find({ category: id, isDeleted: false })
+    .sort({ createdAt: 1 })
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving tutorials.",
       });
     });
 };
 
-
 // Find all treatment List
-exports.TreatmentList = (req,res)=>{
+exports.TreatmentList = (req, res) => {
   const id = req.params.id;
-  const category = req.params.category; 
-  EugiaModel.find({category:category,category_id:id,isDeleted:false})
-  .then(response=>{
-    res.send(response)
-  }).catch(err=>{
-    res.status(500).send({
-      message:
-          err.message || "some error occurred while retrieving tutorials"
+  const category = req.params.category;
+  EugiaModel.find({ category: category, category_id: id, isDeleted: false })
+    .then((response) => {
+      res.send(response);
     })
-  })
-}
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "some error occurred while retrieving tutorials",
+      });
+    });
+};
 
 // Find all published Tutorials
 exports.findAllApplyJob = (req, res) => {
   const id = req.params.id;
-  console.log(id)
-  EugiaModel.find({ category: "applyjob",isDeleted:false })
-    .then(data => {
+  console.log(id);
+  EugiaModel.find({ category: "applyjob", isDeleted: false })
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving tutorials.",
       });
     });
 };
-
-
-
 
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
-      message: "Data to update can not be empty!"
+      message: "Data to update can not be empty!",
     });
   }
 
   const id = req.params.id;
-  console.log("Id : ",id);
-  if(req.file){
-    const path = req.file.path
-    var img_url =req.protocol+"://"+req.headers.host+"/"+path
-    req.body.image = img_url ;
-    console.log("image url ",req.file.path)
+  console.log("Id : ", id);
+  if (req.file) {
+    const path = req.file.path;
+    var img_url = req.protocol + "://" + req.headers.host + "/" + path;
+    req.body.image = img_url;
+    console.log("image url ", req.file.path);
   }
-  console.log("Data : ",req.body)
+  console.log("Data : ", req.body);
 
   EugiaModel.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-    .then(data => {
+    .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`
+          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found!`,
         });
       } else res.send({ message: "Tutorial was updated successfully." });
     })
-    .catch(err => {
-      console.log(err)
+    .catch((err) => {
+      console.log(err);
       res.status(500).send({
-        message: "Error updating Tutorial with id=" + id
+        message: "Error updating Tutorial with id=" + id,
       });
     });
 };
@@ -412,44 +458,46 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   if (!req.body) {
     return res.status(400).send({
-      message: "Data to delete can not be empty!"
+      message: "Data to delete can not be empty!",
     });
   }
 
   let deleteData = {
-    isDeleted : true,
-  }
+    isDeleted: true,
+  };
   const id = req.params.id;
 
-  EugiaModel.findByIdAndUpdate(id,deleteData, { useFindAndModify: false })
-    .then(data => {
+  EugiaModel.findByIdAndUpdate(id, deleteData, { useFindAndModify: false })
+    .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
         });
       } else res.send({ message: "Tutorial was deleted successfully." });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error deleting Tutorial with id=" + id
+        message: "Error deleting Tutorial with id=" + id,
       });
     });
 };
 
-
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
   const title = req.query.title;
-  var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+  var condition = title
+    ? { title: { $regex: new RegExp(title), $options: "i" } }
+    : {};
 
-  ApplyJob.find(condition).sort({createdAt:1})
-    .then(data => {
+  ApplyJob.find(condition)
+    .sort({ createdAt: 1 })
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving tutorials.",
       });
     });
 };
@@ -459,38 +507,37 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   EugiaModel.findById(id)
-    .then(data => {
+    .then((data) => {
       if (!data)
         res.status(404).send({ message: "Not found Tutorial with id " + id });
       else res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res
         .status(500)
         .send({ message: "Error retrieving Tutorial with id=" + id });
     });
 };
 
-
 // Delete a Tutorial with the specified id in the request
 exports.deletes = (req, res) => {
   const id = req.params.id;
 
   ApplyJob.findByIdAndRemove(id, { useFindAndModify: false })
-    .then(data => {
+    .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
         });
       } else {
         res.send({
-          message: "Tutorial was deleted successfully!"
+          message: "Tutorial was deleted successfully!",
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id
+        message: "Could not delete Tutorial with id=" + id,
       });
     });
 };
@@ -498,29 +545,30 @@ exports.deletes = (req, res) => {
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
   ApplyJob.deleteMany({})
-    .then(data => {
+    .then((data) => {
       res.send({
-        message: `${data.deletedCount} Tutorials were deleted successfully!`
+        message: `${data.deletedCount} Tutorials were deleted successfully!`,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all tutorials."
+          err.message || "Some error occurred while removing all tutorials.",
       });
     });
 };
 
-exports.applyJob=(req,res)=>{
-  console.log("Welcome")
-  if(req.file){
-    const path = req.file.path
-    var img_url =req.protocol+"://"+req.headers.host+"/"+path
-    req.body.image = img_url ;
-    console.log("image url ",req.file.path)
+exports.applyJob = (req, res) => {
+  console.log("Welcome");
+  if (req.file) {
+    const path = req.file.path;
+    var img_url = req.protocol + "://" + req.headers.host + "/" + path;
+    req.body.image = img_url;
+    console.log("image url ", req.file.path);
   }
-  req.body.image = img_url ;
-  const {job_id,name,contact_no,email,description,image,category} = req.body
+  req.body.image = img_url;
+  const { job_id, name, contact_no, email, description, image, category } =
+    req.body;
   const applyJob = ApplyJob({
     job_id,
     name,
@@ -528,61 +576,68 @@ exports.applyJob=(req,res)=>{
     email,
     description,
     image,
-    category
-  })
-  console.log(req.body)
-  applyJob.save().then(resp=>{
-    res.json(resp)
-  }).catch(err=>{
-    res.json(err)
-  })
-}
-exports.jobList = (req,res)=>{  
+    category,
+  });
+  console.log(req.body);
+  applyJob
+    .save()
+    .then((resp) => {
+      res.json(resp);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+};
+exports.jobList = (req, res) => {
   ApplyJob.aggregate([
     // { $project : { updatedAt: 0, createdAt: 0 } },
     {
-      $sort:{createdAt:1}
+      $sort: { createdAt: 1 },
     },
     {
-    $lookup: {
-    "from": "eugias",
-    "localField": "job_id",
-    "foreignField": "_id",
-    "as": "Applicants"        
+      $lookup: {
+        from: "eugias",
+        localField: "job_id",
+        foreignField: "_id",
+        as: "Applicants",
+      },
     },
- },
- 
- {
-  $project:{
-    'Job.updatedAt':0,
-    'Job.createdAt': 0
-  }
- }
-  ]).then(resp=>{
-      res.json(resp)
-    }).catch(err=>{
-      res.json(err)
-    })
-  }
-exports.count = (req,res)=>{
-  let condition={}
 
-  if(req.body.category=="createjob"){
-      condition.category = "$createjob"
+    {
+      $project: {
+        "Job.updatedAt": 0,
+        "Job.createdAt": 0,
+      },
+    },
+  ])
+    .then((resp) => {
+      res.json(resp);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+};
+exports.count = (req, res) => {
+  let condition = {};
+
+  if (req.body.category == "createjob") {
+    condition.category = "$createjob";
   }
   EugiaModel.aggregate([
     {
-      $match:{isDeleted:false},
+      $match: { isDeleted: false },
     },
     {
-      $group : { _id : "$category" , count:{$sum:1}}}
-]).then(response=>{
-  res.json(response)
-}).catch(err=>{
-  console.log(err);
-  res.json(err)
-})
-}
-
+      $group: { _id: "$category", count: { $sum: 1 } },
+    },
+  ])
+    .then((response) => {
+      res.json(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json(err);
+    });
+};
 
 // contact/product/investor/join journy
