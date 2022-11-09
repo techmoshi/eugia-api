@@ -9,7 +9,7 @@ const joinUs = require("./mailTemplates/joinUs");
 
 const getNewTransportObject = () => {
   const smtpTransport = nodemailer.createTransport({
-    host: process.env.SMTP_ENDPOINT,
+    host: "125.17.120.139",
     port: 25,
   });
 
