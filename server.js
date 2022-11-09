@@ -1,40 +1,39 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+require("dotenv").config();
 
-  
 app.use(express.json());
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 var corsOptions = {
-  origin: "http://localhost:3000"
+  origin: "http://localhost:3000",
 };
-app.use(
-  cors(),
-);
+app.use(cors());
 //app.use(cors(corsOptions));
 app.use(function (err, req, res, next) {
-
   console.log(err);
 
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
   //logger.error(err);
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Authorization,X-ACCESS_TOKEN,Access-Control-Allow-Headers, Origin,Accept,X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Authorization,X-ACCESS_TOKEN,Access-Control-Allow-Headers, Origin,Accept,X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
+  );
 
   res.status(err.status || 500);
-  res.send('Invalid API Request ');
+  res.send("Invalid API Request ");
 });
 
-app.use('/assets',express.static('assets'))
+app.use("/assets", express.static("assets"));
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -46,12 +45,12 @@ const db = require("./app/models");
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log("Connected to the database!");
   })
-  .catch(err => {
+  .catch((err) => {
     console.log("Cannot connect to the database!", err);
     process.exit();
   });
