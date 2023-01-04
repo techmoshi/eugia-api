@@ -92,10 +92,10 @@ exports.create = (req, res) => {
       validation = Joi.object().keys({
         title: Joi.string().required(),
         description: Joi.string().required(),
-        image: Joi.string().required(),
+        // image: Joi.string().required(),
         category: Joi.string().required(),
       });
-      break;   
+      break;
     case "news":
       validation = Joi.object().keys({
         title: Joi.string().required(),
